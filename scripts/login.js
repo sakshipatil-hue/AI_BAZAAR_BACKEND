@@ -1,8 +1,8 @@
 const API_BASE =  "https://ai-bazaar-backend-g2yb.onrender.com";
 
 document.addEventListener("DOMContentLoaded", function () {
-    if (localStorage.getItem("token")) {
-        window.location.href = "http://localhost:5500/dashboard/dashboard_index.html";
+    if (localStorage.getItem("access_token")) {
+        window.location.href = "dashboard/dashboard_index.html";
         return;
     }
     initLoginTabs();
@@ -89,7 +89,7 @@ async function doLogin(e) {
             successMsg.style.display = "block";
             phoneErr.style.display = "none";
 
-            window.location.replace("http://localhost:5500/dashboard/dashboard_index.html");
+            window.location.replace("dashboard/dashboard_index.html");
 
         } else {
             phoneErr.innerText = data.error || "Wrong phone or password. Try again.";
@@ -133,7 +133,7 @@ async function doSignup(e) {
     btn.innerText = "Creating...";
 
     try {
-        const res = await fetch("http://localhost:5000/api/auth/register", {
+        const res = await fetch(`${API_BASE}/api/auth/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
