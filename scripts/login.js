@@ -1,4 +1,4 @@
-const API_BASE =  "https://ai-bazaar-backend-g2yb.onrender.com";
+const API_BASE = "https://ai-bazaar-backend-g2yb.onrender.com";
 
 document.addEventListener("DOMContentLoaded", function () {
     if (localStorage.getItem("access_token")) {
@@ -70,36 +70,32 @@ async function doLogin(e) {
     btn.innerText = "Please wait...";
 
     try {
-        const res = await fetch("http://localhost:5000/api/auth/login", {
+        const res = await fetch(`${API_BASE}/api/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ phone: phone, password: password })
         });
 
         const data = await res.json();
-        console.log("Login response:", res.status, data);
 
-        if (res.ok && data.token) {
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("user_id", data.user_id);
-            localStorage.setItem("user_name", data.name);
-            localStorage.setItem("shop_name", data.shop_name);
+        if (res.ok && data.access_token) {
+            localStorage.setItem("access_token", data.access_token);
 
-            successMsg.innerText = "Login successful! Taking you to dashboard...";
+            successMsg.innerText = "Login successful! Redirecting to dashboard...";
             successMsg.style.display = "block";
             phoneErr.style.display = "none";
 
-            window.location.replace("dashboard/dashboard_index.html");
+            setTimeout(() => {
+                window.location.href = "dashboard/dashboard_index.html";
+            }, 1000);
 
         } else {
-            phoneErr.innerText = data.error || "Wrong phone or password. Try again.";
+            phoneErr.innerText = data.detail || "Wrong phone or password. Try again.";
             phoneErr.style.display = "block";
-            successMsg.style.display = "none";
         }
 
     } catch (err) {
-        console.error("Login error:", err);
-        phoneErr.innerText = "Cannot reach server. Is backend running on port 5000?";
+        phoneErr.innerText = "Cannot reach server. Please try again.";
         phoneErr.style.display = "block";
     } finally {
         btn.disabled = false;
@@ -145,25 +141,23 @@ async function doSignup(e) {
         });
 
         const data = await res.json();
-        console.log("Register response:", res.status, data);
 
         if (res.ok) {
             successMsg.innerText = "Account created! Please login now.";
             successMsg.style.display = "block";
-            setTimeout(function() {
+            setTimeout(function () {
                 const loginTab = document.querySelector(".login-tab[data-tab='login']");
                 if (loginTab) loginTab.click();
                 const lp = document.getElementById("loginPhone");
                 if (lp) lp.value = phone;
             }, 1500);
         } else {
-            phoneErr.innerText = data.error || "Registration failed. Try again.";
+            phoneErr.innerText = data.detail || "Registration failed. Try again.";
             phoneErr.style.display = "block";
         }
 
     } catch (err) {
-        console.error("Register error:", err);
-        phoneErr.innerText = "Cannot reach server. Is backend running on port 5000?";
+        phoneErr.innerText = "Cannot reach server. Please try again.";
         phoneErr.style.display = "block";
     } finally {
         btn.disabled = false;
