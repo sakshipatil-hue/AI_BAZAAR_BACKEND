@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Bazaar - Shop Dashboard</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="lib/chart.min.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+    
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --topbar-height: 70px;
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+    <!-- Top Bar -->
+    <nav class="topbar" id="topbar">
+        <div class="topbar-left">
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="shop-info">
+                <div class="shop-icon">
+                    <i class="fas fa-store"></i>
+                </div>
+                <div class="shop-details">
+                    <h1 class="shop-name">Ramesh Kirana Store</h1>
+                    <p class="shop-location">Gandhi Nagar, Delhi</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="topbar-right">
+            <div class="language-selector">
+                <select id="languageSelect" aria-label="Select language">
+                    <option value="english">English</option>
+                    <option value="hindi" selected>हिंदी</option>
+                    <option value="tamil">தமிழ்</option>
+                    <option value="gujarati">ગુજરાતી</option>
+                    <option value="telugu">తెలుగు</option>
+                </select>
+            </div>
+            
+            <div class="notification-bell">
+                <button class="notification-btn" id="notificationBtn" aria-label="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count">3</span>
+                </button>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <button class="mark-all-read">Mark all read</button>
+                    </div>
+                    <div class="notification-list">
+                        <div class="notification-item unread">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div>
+                                <p><strong>Sugar stock low</strong> - Only 2 kg remaining</p>
+                                <span class="notification-time">10 min ago</span>
+                            </div>
+                        </div>
+                        <div class="notification-item unread">
+                            <i class="fas fa-rupee-sign"></i>
+                            <div>
+                                <p><strong>Good sales today!</strong> ₹5,250 so far</p>
+                                <span class="notification-time">1 hour ago</span>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <i class="fas fa-calendar-check"></i>
+                            <div>
+                                <p><strong>Monthly report ready</strong> - View insights</p>
+                                <span class="notification-time">1 day ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="user-profile">
+                <button class="profile-btn" id="profileBtn" aria-label="User profile">
+                    <div class="avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="user-name">Ramesh Kumar</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="#profile" class="dropdown-item">
+                        <i class="fas fa-user"></i> My Profile
+                    </a>
+                    <a href="#settings" class="dropdown-item">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#voice-entry" class="nav-item" data-section="voice-entry">
+                        <i class="fas fa-microphone"></i>
+                        <span>Voice Entry</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#inventory" class="nav-item" data-section="inventory">
+                        <i class="fas fa-boxes"></i>
+                        <span>Inventory</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#billing" class="nav-item" data-section="billing">
+                        <i class="fas fa-file-invoice"></i>
+                        <span>Billing</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#insights" class="nav-item" data-section="insights">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Insights</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#register-upload" class="nav-item" data-section="register-upload">
+                        <i class="fas fa-camera"></i>
+                        <span>Register Upload</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#profile" class="nav-item" data-section="profile">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <div class="ai-assistant">
+                    <div class="assistant-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="assistant-info">
+                        <strong>AI Assistant</strong>
+                        <p>Always here to help!</p>
+                    </div>
+                </div>
+                <button class="help-btn">
+                    <i class="fas fa-question-circle"></i> Help
+                </button>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        
+        <!-- Dashboard Overview -->
+        <section id="dashboard" class="dashboard-section active">
+            <div class="section-header">
+                <h2>Shop Overview</h2>
+                <div class="date-selector">
+                    <span>Today: </span>
+                    <span id="currentDate">22 Jan 2024</span>
+                </div>
+            </div>
+            
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="summary-card sales-card">
+                    <div class="card-icon">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Today's Sales</h3>
+                        <div class="card-value">
+                            <span class="value" id="todaySales">0</span>
+                            <span class="currency">₹</span>
+                        </div>
+                        <div class="card-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>12% from yesterday</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="summary-card revenue-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Monthly Revenue</h3>
+                        <div class="card-value">
+                            <span class="value" id="monthlyRevenue">0</span>
+                            <span class="currency">₹</span>
+                        </div>
+                        <div class="card-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>8% from last month</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="summary-card stock-card">
+                    <div class="card-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Low Stock Items</h3>
+                        <div class="card-value">
+                            <span class="value" id="lowStockCount">0</span>
+                            <span class="unit">items</span>
+                        </div>
+                        <div class="card-change negative">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Needs attention</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="summary-card alerts-card">
+                    <div class="card-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Pending Tasks</h3>
+                        <div class="card-value">
+                            <span class="value" id="pendingTasks">0</span>
+                            <span class="unit">tasks</span>
+                        </div>
+                        <div class="card-change">
+                            <i class="fas fa-clock"></i>
+                            <span>To complete today</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Stats & Charts -->
+            <div class="dashboard-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Sales This Month</h3>
+                        <div class="chart-actions">
+                            <button class="chart-btn active" data-period="week">Week</button>
+                            <button class="chart-btn" data-period="month">Month</button>
+                            <button class="chart-btn" data-period="year">Year</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="top-items-container">
+                    <div class="chart-header">
+                        <h3>Top Selling Items</h3>
+                        <button class="see-all-btn">See All</button>
+                    </div>
+                    <div class="top-items-list">
+                        <div class="top-item">
+                            <div class="item-rank">1</div>
+                            <div class="item-info">
+                                <h4>Atta (Flour)</h4>
+                                <p>52 kg sold this month</p>
+                            </div>
+                            <div class="item-sales">
+                                <span class="sales-value">₹4,160</span>
+                            </div>
+                        </div>
+                        <div class="top-item">
+                            <div class="item-rank">2</div>
+                            <div class="item-info">
+                                <h4>Sugar</h4>
+                                <p>38 kg sold this month</p>
+                            </div>
+                            <div class="item-sales">
+                                <span class="sales-value">₹2,280</span>
+                            </div>
+                        </div>
+                        <div class="top-item">
+                            <div class="item-rank">3</div>
+                            <div class="item-info">
+                                <h4>Tea Powder</h4>
+                                <p>25 packets sold</p>
+                            </div>
+                            <div class="item-sales">
+                                <span class="sales-value">₹1,875</span>
+                            </div>
+                        </div>
+                        <div class="top-item">
+                            <div class="item-rank">4</div>
+                            <div class="item-info">
+                                <h4>Cooking Oil</h4>
+                                <p>18 bottles sold</p>
+                            </div>
+                            <div class="item-sales">
+                                <span class="sales-value">₹2,700</span>
+                            </div>
+                        </div>
+                        <div class="top-item">
+                            <div class="item-rank">5</div>
+                            <div class="item-info">
+                                <h4>Rice</h4>
+                                <p>15 kg sold</p>
+                            </div>
+                            <div class="item-sales">
+                                <span class="sales-value">₹1,200</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="recent-activity">
+                    <div class="chart-header">
+                        <h3>Recent Activity</h3>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon success">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="activity-details">
+                                <p><strong>Sale recorded</strong> - 2 kg sugar to Priya</p>
+                                <span class="activity-time">10:30 AM</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="activity-details">
+                                <p><strong>Low stock alert</strong> - Tea powder running low</p>
+                                <span class="activity-time">9:15 AM</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon info">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="activity-details">
+                                <p><strong>Invoice generated</strong> - Customer: Rajesh Kumar</p>
+                                <span class="activity-time">Yesterday</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon success">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="activity-details">
+                                <p><strong>New stock added</strong> - 10 kg atta received</p>
+                                <span class="activity-time">Yesterday</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ai-insight-card">
+                    <div class="insight-header">
+                        <div class="ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div>
+                            <h3>AI Insight</h3>
+                            <p>Your business assistant</p>
+                        </div>
+                    </div>
+                    <div class="insight-content">
+                        <p>Based on your sales data, I recommend:</p>
+                        <ul class="insight-list">
+                            <li>
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Stock up on tea powder - selling fast!</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Morning hours (9-11 AM) are your peak sales time</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Consider offering bundle deals on atta + oil</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Voice Entry Section -->
+        <section id="voice-entry" class="dashboard-section">
+            <div class="section-header">
+                <h2>Voice Sales Entry</h2>
+                <p class="section-subtitle">Speak naturally in your language</p>
+            </div>
+            
+            <div class="voice-entry-container">
+                <div class="voice-demo">
+                    <div class="language-selector-card">
+                        <h4>Select Language</h4>
+                        <div class="language-options">
+                            <button class="lang-option active" data-lang="hindi">
+                                <span>हिंदी</span>
+                            </button>
+                            <button class="lang-option" data-lang="tamil">
+                                <span>தமிழ்</span>
+                            </button>
+                            <button class="lang-option" data-lang="gujarati">
+                                <span>ગુજરાતી</span>
+                            </button>
+                            <button class="lang-option" data-lang="telugu">
+                                <span>తెలుగు</span>
+                            </button>
+                            <button class="lang-option" data-lang="e
