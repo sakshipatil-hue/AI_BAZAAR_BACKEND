@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Bazaar - Shop Dashboard</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="dashboard/styles/dashboard.css">
+    <link rel="stylesheet" href="dashboard/styles/animation.css">
+    <link rel="stylesheet" href="dashboard/styles/responsive_dashboard.css">
+
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --primary-dark: #E55A2B;
+            --primary-light: #FFE5DC;
+            --secondary: #2E86AB;
+            --success: #4CAF50;
+            --warning: #FFB74D;
+            --danger: #F44336;
+            --dark: #2A2D34;
+            --light: #FFF9F0;
+            --border: #E0E0E0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --sidebar-width: 260px;
+            --topbar-height: 70px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: var(--light); }
+    </style>
+</head>
+<body class="dashboard-body">
+
+    <!-- Top Bar -->
+    <nav class="topbar" id="topbar">
+        <div class="topbar-left">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="shop-info">
+                <div class="shop-icon"><i class="fas fa-store"></i></div>
+                <div class="shop-details">
+                    <h1 class="shop-name" id="shopNameDisplay">AI Bazaar</h1>
+                    <p class="shop-location">Your Smart Shop Assistant</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <div class="language-selector">
+                <select id="languageSelect">
+                    <option value="english">English</option>
+                    <option value="hindi">हिंदी</option>
+                    <option value="tamil">தமிழ்</option>
+                    <option value="gujarati">ગુજરાતી</option>
+                    <option value="telugu">తెలుగు</option>
+                </select>
+            </div>
+
+            <div class="notification-bell">
+                <button class="notification-btn" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count">0</span>
+                </button>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <button class="mark-all-read">Mark all read</button>
+                    </div>
+                    <div class="notification-list" id="notificationList">
+                        <div class="notification-item">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <p>Welcome to AI Bazaar!</p>
+                                <span class="notification-time">Just now</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="user-profile">
+                <button class="profile-btn" id="profileBtn">
+                    <div class="avatar"><i class="fas fa-user"></i></div>
+                    <span class="user-name" id="userNameDisplay">Shop Owner</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="#profile" class="dropdown-item">
+                        <i class="fas fa-user"></i> My Profile
+                    </a>
+                    <a href="#settings" class="dropdown-item">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#voice-entry" class="nav-item" data-section="voice-entry">
+                        <i class="fas fa-microphone"></i>
+                        <span>Voice Entry</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#inventory" class="nav-item" data-section="inventory">
+                        <i class="fas fa-boxes"></i>
+                        <span>Inventory</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#billing" class="nav-item" data-section="billing">
+                        <i class="fas fa-file-invoice"></i>
+                        <span>Billing</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#insights" class="nav-item" data-section="insights">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Insights</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#register-upload" class="nav-item" data-section="register-upload">
+                        <i class="fas fa-camera"></i>
+                        <span>Register Upload</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#profile" class="nav-item" data-section="profile">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="ai-assistant">
+                    <div class="assistant-avatar"><i class="fas fa-robot"></i></div>
+                    <div class="assistant-info">
+                        <strong>AI Assistant</strong>
+                        <p>Always here to help!</p>
+                    </div>
+                </div>
+                <button class="help-btn">
+                    <i class="fas fa-question-circle"></i> Help
+                </button>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="dashboard-section active">
+            <div class="section-header">
+                <h2>Shop Overview</h2>
+                <div class="date-selector">
+                    <span>Today: </span>
+                    <span id="currentDate">Loading...</span>
+                </div>
+            </div>
+
+            <div class="summary-cards">
+                <div class="summary-card sales-card">
+                    <div class="card-icon"><i class="fas fa-rupee-sign"></i></div>
+                    <div class="card-content">
+                        <h3>Today's Sales</h3>
+                        <div class="card-value">
+                            <span class="value" id="todaySales">0</span>
+                            <span class="currency">₹</span>
+                        </div>
+                        <div class="card-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>Live data</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-card revenue-card">
+                    <div class="card-icon"><i class="fas fa-chart-bar"></i></div>
+                    <div class="card-content">
+                        <h3>Monthly Revenue</h3>
+                        <div class="card-value">
+                            <span class="value" id="monthlyRevenue">0</span>
+                            <span class="currency">₹</span>
+                        </div>
+                        <div class="card-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>Live data</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-card stock-card">
+                    <div class="card-icon"><i class="fas fa-box"></i></div>
+                    <div class="card-content">
+                        <h3>Low Stock Items</h3>
+                        <div class="card-value">
+                            <span class="value" id="lowStockCount">0</span>
+                            <span class="unit">items</span>
+                        </div>
+                        <div class="card-change negative">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Needs attention</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-card alerts-card">
+                    <div class="card-icon"><i class="fas fa-shopping-bag"></i></div>
+                    <div class="card-content">
+                        <h3>Total Products</h3>
+                        <div class="card-value">
+                            <span class="value" id="totalItems">0</span>
+                            <span class="unit">items</span>
+                        </div>
+                        <div class="card-change">
+                            <i class="fas fa-boxes"></i>
+                            <span>In inventory</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Sales This Week</h3>
+                        <div class="chart-actions">
+                            <button class="chart-btn active" data-period="week">Week</button>
+                            <button class="chart-btn" data-period="month">Month</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="top-items-container">
+                    <div class="chart-header">
+                        <h3>Top Selling Items</h3>
+                    </div>
+                    <div class="top-items-list" id="topItemsList">
+                        <p style="padding:20px;color:#999;">Loading...</p>
+                    </div>
+                </div>
+
+                <div class="recent-activity">
+                    <div class="chart-header">
+                        <h3>Recent Activity</h3>
+                    </div>
+                    <div class="activity-list" id="activityList">
+                        <p style="padding:20px;color:#999;">Loading...</p>
+                    </div>
+                </div>
+
+                <div class="ai-insight-card">
+                    <div class="insight-header">
+                        <div class="ai-avatar"><i class="fas fa-robot"></i></div>
+                        <div>
+                            <h3>AI Insight</h3>
+                            <p>Your business assistant</p>
+                        </div>
+                    </div>
+                    <div class="insight-content" id="aiInsightContent">
+                        <p>Loading AI insights...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Voice Entry Section -->
+        <section id="voice-entry" class="dashboard-section">
+            <div class="section-header">
+                <h2>Voice Sales Entry</h2>
+                <p class="section-subtitle">Speak naturally in your language</p>
+            </div>
+
+            <div class="voice-entry-container">
+                <div class="voice-demo">
+                    <div class="language-selector-card">
+                        <h4>Select Language</h4>
+                        <div class="language-options">
+                            <button class="lang-option active" data-lang="hindi"><span>हिंदी</span></button>
+                            <button class="lang-option" data-lang="tamil"><span>தமிழ்</span></button>
+                            <button class="lang-option" data-lang="gujarati"><span>ગુજરાતી</span></button>
+                            <button class="lang-option" data-lang="telugu"><span>తెలుగు</span></button>
+                            <button class="lang-option" data-lang="english"><span>English</span></button>
+                        </div>
+                    </div>
+
+                    <div class="voice-interface">
+                        <div class="voice-controls">
+                            <div class="voice-wave-container" id="voiceWaveContainer">
+                                <div class="voice-wave" id="voiceWave">
+                                    <div class="bar"></div>
+                                    <div class="bar"></div>
+                                    <div class="bar"></div>
+                                    <div class="bar"></div>
+                                    <div class="bar"></div>
+                                </div>
+                                <p class="listening-text">Listening...</p>
+                            </div>
+                            <button class="mic-button-large" id="micButtonLarge">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                            <p class="voice-hint">Click the microphone and speak naturally</p>
+                        </div>
+
+                        <div class="voice-conversation" id="voiceConversation">
+                            <div class="message ai">
+                                <div class="avatar"><i class="fas fa-robot"></i></div>
+                                <div class="bubble">
+                                    <p>Hello! I'm ready to record your sales. Try saying "Aaj 2 kg chini bechi"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h3>Quick Actions</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" data-action="sold">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Sold Items</span>
+                        </button>
+                        <button class="action-btn" data-action="purchased">
+                            <i class="fas fa-truck-loading"></i>
+                            <span>Stock Added</span>
+                        </button>
+                        <button class="action-btn" data-action="customer">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Add Customer</span>
+                        </button>
+                        <button class="action-btn" data-action="expense">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Add Expense</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Register Upload Section -->
+        <section id="register-upload" class="dashboard-section">
+            <div class="section-header">
+                <h2>Register Upload</h2>
+                <p class="section-subtitle">Upload your paper register photo for AI analysis</p>
+            </div>
+
+            <div class="upload-container">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon"><i class="fas fa-camera"></i></div>
+                    <h3>Upload Register Photo</h3>
+                    <p>Take a photo or upload image of your paper register</p>
+                    <input type="file" id="registerUpload" accept="image/*" hidden>
+                    <button class="upload-btn" id="uploadBtn">
+                        <i class="fas fa-upload"></i> Choose File
+                    </button>
+                    <p class="upload-note">Supported: JPG, PNG • Max 10MB</p>
+                </div>
+
+                <div class="upload-preview" id="uploadPreview" style="display:none;">
+                    <div class="preview-header">
+                        <h4>Image Preview</h4>
+                        <button class="remove-btn" id="removeImage"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="preview-image" id="previewImage"></div>
+                    <button class="analyze-btn" id="analyzeBtn">
+                        <i class="fas fa-brain"></i> Analyze with AI
+                    </button>
+                </div>
+
+                <div class="ai-results" id="aiResults" style="display:none;">
+                    <div class="results-header">
+                        <h4><i class="fas fa-chart-bar"></i> AI Analysis Results</h4>
+                    </div>
+                    <div id="ocrResultsTable"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Inventory Section -->
+        <section id="inventory" class="dashboard-section">
+            <div class="section-header">
+                <h2>Inventory Management</h2>
+                <div class="section-actions">
+                    <button class="add-item-btn" id="addProductBtn">
+                        <i class="fas fa-plus"></i> Add New Item
+                    </button>
+                </div>
+            </div>
+
+            <div class="inventory-controls">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search items..." id="inventorySearch">
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All Items</button>
+                    <button class="filter-btn" data-filter="low">Low Stock</button>
+                    <button class="filter-btn" data-filter="out">Out of Stock</button>
+                </div>
+            </div>
+
+            <div class="inventory-table-container">
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Category</th>
+                            <th>Current Stock</th>
+                            <th>Min Stock</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody">
+                        <tr><td colspan="6" style="text-align:center;padding:20px;">Loading inventory...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="inventory-summary">
+                <div class="summary-card">
+                    <h4>Total Items</h4>
+                    <div class="summary-value" id="totalItemsCount">0</div>
+                </div>
+                <div class="summary-card">
+                    <h4>Low Stock</h4>
+                    <div class="summary-value danger" id="lowStockItems">0</div>
+                </div>
+                <div class="summary-card">
+                    <h4>Out of Stock</h4>
+                    <div class="summary-value warning" id="outOfStock">0</div>
+                </div>
+                <div class="summary-card">
+                    <h4>Stock Value</h4>
+                    <div class="summary-value" id="stockValue">₹0</div>
+                </div>
+            </div>
+
+            <!-- Add/Edit Product Modal -->
+            <div class="modal" id="productModal" style="display:none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="modalTitle">Add New Product</h3>
+                        <button class="modal-close" id="closeModal"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="productId">
+                        <div class="form-group">
+                            <label>Product Name *</label>
+                            <input type="text" id="productName" placeholder="e.g. Atta">
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <input type="text" id="productCategory" placeholder="e.g. Grocery">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <input type="number" id="productQuantity" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Unit</label>
+                                <input type="text" id="productUnit" placeholder="kg/piece/litre">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Purchase Price (₹)</label>
+                                <input type="number" id="productPurchasePrice" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Selling Price (₹)</label>
+                                <input type="number" id="productSellingPrice" placeholder="0">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>GST Rate (%)</label>
+                                <input type="number" id="productGstRate" placeholder="5" value="5">
+                            </div>
+                            <div class="form-group">
+                                <label>Reorder Level</label>
+                                <input type="number" id="productReorderLevel" placeholder="10" value="10">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="cancel-btn" id="cancelModal">Cancel</button>
+                        <button class="save-btn" id="saveProduct">Save Product</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Billing Section -->
+        <section id="billing" class="dashboard-section">
+            <div class="section-header">
+                <h2>Billing & Invoices</h2>
+                <div class="section-actions">
+                    <button class="new-invoice-btn">
+                        <i class="fas fa-plus"></i> New Invoice
+                    </button>
+                </div>
+            </div>
+
+            <div class="billing-container">
+                <div class="invoice-generator">
+                    <h3>Create New Invoice</h3>
+                    <div class="invoice-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Customer Name</label>
+                                <input type="text" id="customerName" placeholder="Enter customer name">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" id="customerPhone" placeholder="Enter phone number">
+                            </div>
+                        </div>
+                        <div class="invoice-items">
+                            <h4>Items</h4>
+                            <div class="items-table">
+                                <div class="items-header">
+                                    <div>Item</div>
+                                    <div>Quantity</div>
+                                    <div>Price</div>
+                                    <div>Total</div>
+                                    <div></div>
+                                </div>
+                                <div class="items-body" id="invoiceItems"></div>
+                                <button class="add-item-row" id="addItemRow">
+                                    <i class="fas fa-plus"></i> Add Item
+                                </button>
+                            </div>
+                        </div>
+                        <div class="invoice-totals">
+                            <div class="total-row">
+                                <span>Subtotal</span>
+                                <span id="subtotal">₹0.00</span>
+                            </div>
+                            <div class="total-row">
+                                <span>GST</span>
+                                <span id="gstAmount">₹0.00</span>
+                            </div>
+                            <div class="total-row grand-total">
+                                <span>Total Amount</span>
+                                <span id="totalAmount">₹0.00</span>
+                            </div>
+                        </div>
+                        <div class="invoice-actions">
+                            <button class="generate-btn">
+                                <i class="fas fa-print"></i> Generate Invoice
+                            </button>
+                            <button class="send-btn">
+                                <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Insights Section -->
+        <section id="insights" class="dashboard-section">
+            <div class="section-header">
+                <h2>Business Insights</h2>
+                <p class="section-subtitle">AI-powered analysis of your shop performance</p>
+            </div>
+
+            <div class="insights-container">
+                <div class="insights-grid">
+                    <div class="insight-chart-card">
+                        <div class="chart-header">
+                            <h4>Sales Trend</h4>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="insight-chart-card">
+                        <div class="chart-header">
+                            <h4>Top Categories by Revenue</h4>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="dashboard-section">
+            <div class="section-header">
+                <h2>Profile & Settings</h2>
+            </div>
+
+            <div class="profile-container">
+                <div class="profile-sidebar">
+                    <div class="profile-card">
+                        <div class="profile-avatar"><i class="fas fa-user"></i></div>
+                        <h3 id="profileName">Shop Owner</h3>
+                        <p class="profile-role">Shop Owner</p>
+                    </div>
+                </div>
+
+                <div class="profile-content">
+                    <div class="profile-tab active" id="shop-info-tab">
+                        <h3>Shop Information</h3>
+                        <form class="profile-form">
+                            <div class="form-group">
+                                <label>Shop Name</label>
+                                <input type="text" id="shopName" placeholder="Enter shop name">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Owner Name</label>
+                                    <input type="text" id="ownerName" placeholder="Enter your name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    <input type="tel" id="phoneNumber" placeholder="Enter phone">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>GST Number</label>
+                                <input type="text" id="gstNumber" placeholder="Enter GST number">
+                            </div>
+                            <button type="submit" class="save-btn">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts - load dashboard scripts -->
+    <script src="dashboard/scripts/main.js"></script>
+    <script src="dashboard/scripts/dashboard.js"></script>
+    <script src="dashboard/scripts/charts.js"></script>
+    <script src="dashboard/scripts/voice-entry.js"></script>
+    <script src="dashboard/scripts/register-upload.js"></script>
+    <script src="dashboard/scripts/inventory.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Auth check
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Set current date
+            const dateElement = document.getElementById('currentDate');
+            if (dateElement) {
+                const now = new Date();
+                const options = { day: 'numeric', month: 'short', year: 'numeric' };
+                dateElement.textContent = now.toLocaleDateString('en-IN', options);
+            }
+
+            // Initialize dashboard if function exists
+            if (window.initDashboard) {
+                window.initDashboard();
+            }
+
+            // Logout handler
+            const logoutBtn = document.querySelector('.logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function () {
+                    if (confirm('Are you sure you want to logout?')) {
+                        localStorage.clear();
+                        window.location.href = '/login.html';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
