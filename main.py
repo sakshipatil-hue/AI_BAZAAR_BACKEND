@@ -35,7 +35,7 @@ app = FastAPI(
 # ── CORS ──────────────────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://ai-bazaar-zeta.vercel.app", "http://localhost:5500"],
+    allow_origins=["https://ai-bazaar-frontend.vercel.app", "http://localhost:5500"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
