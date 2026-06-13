@@ -20,6 +20,7 @@ class Settings(BaseSettings):
 
     # OpenAI
     OPENAI_API_KEY: str = ""
+    GROQ_API_KEY: str = "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"
 
     # Twilio
     TWILIO_ACCOUNT_SID: str = ""
