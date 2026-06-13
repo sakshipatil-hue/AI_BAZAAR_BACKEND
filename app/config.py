@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = ""
     GROQ_API_KEY: str = ""
     GROQ_TRANSCRIPTION_MODEL: str = "whisper-large-v3"
-    GROQ_CHAT_MODEL: str = "llama3-8b-8192"
+    GROQ_CHAT_MODEL: str = "llama-3.1-8b-instant"
 
     # Twilio
     TWILIO_ACCOUNT_SID: str = ""
