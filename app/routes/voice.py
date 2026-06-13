@@ -48,7 +48,7 @@ async def voice_entry(
         # Step 1 — Transcribe with Whisper via Groq
         with open(tmp_path, "rb") as f:
             transcription = client.audio.transcriptions.create(
-                model="whisper-large-v3",
+                model=settings.GROQ_TRANSCRIPTION_MODEL,
                 file=f,
                 language=whisper_lang,
             )
@@ -66,7 +66,7 @@ Examples:
 - "Ramesh ko 2 kg chawal diya" → Record 2 kg rice given to Ramesh"""
 
         chat = client.chat.completions.create(
-            model="llama3-8b-8192",
+            model=settings.GROQ_CHAT_MODEL,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": transcript}
