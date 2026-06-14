@@ -32,7 +32,7 @@ async def scan_bill(
 
         # Send to Groq Vision
         response = client.chat.completions.create(
-            model="llama-3.2-11b-vision-preview",
+            model=settings.GROQ_VISION_MODEL,
             messages=[
                 {
                     "role": "user",
