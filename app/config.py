@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     GROQ_API_KEY: str = ""
     GROQ_TRANSCRIPTION_MODEL: str = "whisper-large-v3"
     GROQ_CHAT_MODEL: str = "llama-3.1-8b-instant"
+    GROQ_VISION_MODEL: str = "llama-3.2-11b-vision-preview"
 
     # Twilio
     TWILIO_ACCOUNT_SID: str = ""
